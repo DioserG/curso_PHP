@@ -54,6 +54,44 @@ class Usuario
         }
     }
 
+    public static function getList()
+    {
+        $sql = new Sql();
+
+        return  $sql->select("SELECT * FROM tb_usuario ORDER BY nome");
+    }
+
+    public static function search($nome)
+    {
+        $sql = new Sql();
+
+        return $sql->select("SELECT * FROM tb_usuario WHERE nome LIKE :SEARCH ORDER BY nome", array(
+            ':SEARCH'=>"%".$nome."%"
+        ));
+    }
+
+    public function login($nome, $idade)
+    {
+        $sql = new Sql();
+
+        $results = $sql->select("SELECT * FROM tb_usuario WHERE nome = :NOME AND idade = :IDADE", array(
+            ":NOME"=>$nome,
+            ":IDADE"=>$idade
+        ));
+
+        if(isset($results) > 0)
+        {
+            $row = $results[0];
+
+            $this->setIdusuario($row['id']);
+            $this->setNome($row['nome']);
+            $this->setIdade($row['idade']);
+        }else
+        {
+            throw new Exception("Nome ou Idade não estão corretos");
+        }
+    }
+
     public function __toString()
     {
         return json_encode(array(
@@ -64,4 +102,4 @@ class Usuario
     }
 }
 
-?>
+?>  
