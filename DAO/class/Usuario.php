@@ -79,8 +79,6 @@ class Usuario
 
         if(isset($results) > 0)
         {
-            $row = $results[0];
-
             $this->setData($results[0]);
         }else
         {
@@ -127,6 +125,19 @@ class Usuario
             ':IDADE'=>$this->getIdade(),
             'ID'=>$this->getIdusuario()
         ));
+    }
+
+    public function delete()
+    {
+        $sql = new Sql();
+
+        $sql->query("DELETE FROM tb_usuario WHERE id = :ID", array(
+            ':ID'=>$this->getIdusuario()
+        ));
+
+        $this->setIdusuario(0);
+        $this->setNome("");
+        $this->setIdade("");
     }
 
     public function __toString()
