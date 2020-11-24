@@ -20,8 +20,20 @@ require_once("config.php");
 //echo json_encode($search);
 
 //carrega usuário pelo nome e idade
-$usuario = new Usuario();
-$usuario->login("Dioser","28");
+//$usuario = new Usuario();
+//$usuario->login("Dioser","28");
+//echo $usuario;
 
+//INSERT via procedure
+//$aluno = new Usuario("Dioser", "28");
+//$aluno->setNome("Goncalves");
+//$aluno->setIdade("29");
+//$aluno->insert();
+//echo $aluno;
+
+//Update
+$usuario = new Usuario();
+$usuario->loadById(11);
+$usuario->update("Pedro", 37);
 echo $usuario;
 ?>

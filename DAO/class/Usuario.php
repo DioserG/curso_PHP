@@ -48,9 +48,7 @@ class Usuario
         {
             $row = $results[0];
 
-            $this->setIdusuario($row['id']);
-            $this->setNome($row['nome']);
-            $this->setIdade($row['idade']);
+            $this->setData($results[0]);
         }
     }
 
@@ -83,13 +81,52 @@ class Usuario
         {
             $row = $results[0];
 
-            $this->setIdusuario($row['id']);
-            $this->setNome($row['nome']);
-            $this->setIdade($row['idade']);
+            $this->setData($results[0]);
         }else
         {
             throw new Exception("Nome ou Idade não estão corretos");
         }
+    }
+
+    public function setData($data)
+    {
+        $this->setIdusuario($data['id']);
+        $this->setNome($data['nome']);
+        $this->setIdade($data['idade']);
+    }
+
+    public function insert()
+    {
+        $sql = new Sql();
+
+        $results = $sql->select("CALL sp_usuarios_insert(:NOME, :IDADE)", array(
+            ':NOME'=>$this->getNome(),
+            ':IDADE'=>$this->getIdade()
+        ));
+        if(count($results) > 0)
+        {
+            $this->setData($results[0]);
+        }
+    }
+
+    public function __construct($nome = "", $idade = "")
+    {
+        $this->setNome($nome);
+        $this->setIdade($idade);
+    }
+
+    public function update($nome, $idade)
+    {
+        $this->setNome($nome);
+        $this->setIdade($idade);
+
+        $sql = new Sql();
+
+        $sql->query("UPDATE tb_usuario SET nome = :NOME, idade = :IDADE WHERE id = :ID",  array(
+            ':NOME'=>$this->getNome(),
+            ':IDADE'=>$this->getIdade(),
+            'ID'=>$this->getIdusuario()
+        ));
     }
 
     public function __toString()
